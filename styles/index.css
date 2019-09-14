@@ -1,8 +1,24 @@
+@font-face {
+    font-family: "Fjalla One";
+    src: url("fonts/FjallaOne-Regular.ttf") format("truetype");
+    font-weight: normal;
+    font-style: normal;
+
+}
+@font-face {
+    font-family: "Source Sans Pro";
+    src: url("fonts/SourceSansPro-Regular.ttf") format("truetype");
+    font-weight: normal;
+    font-style: normal;
+
+}
+
 body {
     background: #0c0119;
     color: #eee6fa;
+    font-family: 'Source Sans Pro', sans-serif;
     font-size: 18px;
-    padding-top: 1rem;
+    padding-top: 2rem;
 }
 
 a:hover{
@@ -112,8 +128,15 @@ a:hover{
 /*  can't change fill/stroke for SVGS in external CSS
     a way around this is to abuse filters */
 .box img{
-    height: 100px;
+    display: block;
     filter: invert(0.75) sepia(1) saturate(2) hue-rotate(190deg);
+    height: 100px;
+    margin: 0px auto;
+}
+.box span:first-of-type{
+    font-family: 'Fjalla One', sans-serif;
+    font-size: 1.15em;
+    display: block;
 }
 
 @media all and (max-width: 900px)  and (min-width: 500px){
@@ -127,9 +150,6 @@ a:hover{
     }    
     #moon-container{
         transform: scale(.9);
-    }
-    .box{
-        text-align: left;
     }
 }
 
@@ -151,7 +171,14 @@ a:hover{
         margin: -6rem auto -2rem auto;
         left: 50%;
     }
-    .box{
+    .box:not(:first-child){
         text-align: left;
+    }
+    .box img{
+        float: left;
+        margin-right: 25px;
+    }
+    .box section{
+        padding-top: 1.15em;
     }
 }
