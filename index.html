@@ -3,83 +3,106 @@
 
 <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
     <title>New Chrome Tab</title>
-    <link rel="stylesheet" text="text/css" href="styles/normalize.css" />
-    <link rel="stylesheet" type="text/css" href="styles/index.css" />
+    <link rel="stylesheet" href="styles/normalize.css" />
+    <link rel="stylesheet" href="styles/index.css" />
     <script type="text/javascript" src="scripts/jquery-3.1.1.min.js"></script>
     <script type="text/javascript" src="scripts/index.js"></script>
     <script src="scripts/js-planet-phase.js"></script>
 </head>
 
 <body>
-    <aside id="settings">
-        <h2>Settings</h2>
-    </aside>
-    
+    <section>
+        
+    </section>
     <div id="moon-container">
-            <div id="moon"></div>
-            <div id="moon-fix"></div>
+        <div id="moon"></div>
+        <div id="moon-fix"></div>
+        <div id="moon-craters">
+            <div class="crater"></div>
+            <div class="crater"></div>
+            <div class="crater"></div>
         </div>
     </div>
+
     <div id="space">
         <div class="stars"></div>
     </div>
 
     <section id="stats">
-        <p id="moon-phase">
-            <span>Full Moon</span>
-            <span>99%</span>
-        </p>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean vel volutpat metus, vitae placerat urna.
-            Aliquam vitae lacus nulla. Sed nec purus sed mi auctor aliquet. Duis ut cursus nibh. Vestibulum sed est at
-            quam consequat elementum. Maecenas lacinia varius laoreet. Mauris eget tellus vitae magna ullamcorper
-            consequat. Curabitur volutpat magna at nunc tristique, ac ornare lectus rhoncus. Sed eget purus egestas,
-            tristique massa sed, convallis mauris. Vestibulum id tempus ex. Aliquam efficitur sapien blandit turpis
-            condimentum, vehicula porta velit mattis. Cras accumsan nisl pretium diam ultricies suscipit. Sed mollis
-            ipsum vitae nulla ornare, non molestie sapien fringilla. Quisque enim metus, euismod eu pellentesque quis,
-            ullamcorper in tortor.</p>
+        <div id="stats-grid">
+            <div id="box-phase" class="box">
+                <span>Full Moon</span>
+                <span>99%</span>
+            </div>
 
-        <p>In sit amet erat congue, lobortis odio in, cursus dolor. Mauris non venenatis libero. Cras in aliquam tellus.
-            Nunc dictum, urna vitae bibendum accumsan, erat nisl rhoncus ante, quis commodo diam neque lobortis mauris.
-            Maecenas sed congue metus. Mauris molestie, purus pellentesque consequat lobortis, turpis ipsum condimentum
-            sem, et tincidunt sapien nisl ut dui. Phasellus bibendum hendrerit augue, ac feugiat elit. Aliquam posuere
-            ex nec vehicula porta.</p>
+            <div id="box-moonrise" class="box">
+                <img title="Moonrise - when the moon is first visible above the horizon" src="svg/wi-moonrise.svg" />
+            </div>
+            <div id="box-moonset" class="box">
+                <img title="Moonset - when the moon is just below the horizon" src="svg/wi-moonset.svg" />
+            </div>
 
-        <p>Maecenas nec diam faucibus, laoreet massa consectetur, consectetur ligula. Nullam porttitor lacinia porta.
-            Maecenas ut est quis sapien auctor malesuada. Curabitur fringilla viverra viverra. Cras est urna, egestas ut
-            felis ut, lacinia tempor augue. Nulla ac vestibulum justo. In sagittis ex ut est luctus rhoncus.
-            Pellentesque nisi lorem, interdum eget diam ut, vehicula elementum magna. Aenean justo ipsum, laoreet quis
-            augue vitae, rutrum cursus ante. Proin porta commodo sem, eget tristique libero tristique id.</p>
+            <div id="box-zodiac" class="box">
+                    <img title="Moonrise - when the moon is first visible above the horizon" src="svg/mars-astronomical-astrology-horoscope-zodiac-sign-symbol-20963.svg#svgView(viewBox(-4,-4,24,24))" />
+            </div>
+            <div id="box-hour" class="box">
+                    <img title="Moonrise - when the moon is first visible above the horizon" src="svg/leo-zodiac-horoscope-astrology-sign-symbol-20955.svg#svgView(viewBox(-4,-4,24,24))" />
+            </div>
 
-        <p>Pellentesque ac ex elit. Sed varius varius sapien, quis eleifend tortor semper at. Pellentesque auctor sed
-            sem nec auctor. Donec ac magna nec augue malesuada sodales. In vitae sapien justo. Proin sed diam a nunc
-            imperdiet iaculis ut ac est. Etiam eget tellus ipsum. Donec eleifend quis odio id vehicula. Lorem ipsum
-            dolor sit amet, consectetur adipiscing elit. Aenean vulputate mauris sit amet iaculis auctor. Quisque in
-            felis nec est venenatis mattis. Phasellus libero enim, condimentum eu ornare vel, feugiat eget augue.
-            Pellentesque venenatis maximus nisi eget condimentum.</p>
+            <div id="box-misc" class="box">
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean vel volutpat metus, vitae placerat
+                    urna.
+                    Aliquam vitae lacus nulla. Sed nec purus sed mi auctor aliquet. Duis ut cursus nibh. Vestibulum sed
+                    est at
+                    quam consequat elementum. Maecenas lacinia varius laoreet. Mauris eget tellus vitae magna
+                    ullamcorper
+                    consequat. Curabitur volutpat magna at nunc tristique, ac ornare lectus rhoncus. Sed eget purus
+                    egestas,
+                    tristique massa sed, convallis mauris. Vestibulum id tempus ex. Aliquam efficitur sapien blandit
+                    turpis
+                    condimentum, vehicula porta velit mattis. Cras accumsan nisl pretium diam ultricies suscipit. Sed
+                    mollis
+                    ipsum vitae nulla ornare, non molestie sapien fringilla. Quisque enim metus, euismod eu pellentesque
+                    quis,
+                    ullamcorper in tortor.</p>
 
-        <p>Nulla iaculis quam sit amet nibh mollis facilisis. Pellentesque habitant morbi tristique senectus et netus et
-            malesuada fames ac turpis egestas. Cras malesuada sollicitudin finibus. Duis blandit eget risus vitae
-            facilisis. Nam tristique ante non diam vestibulum gravida. Vivamus egestas dolor sit amet dapibus tempor. Ut
-            at velit malesuada, dapibus mi vestibulum, ultrices dolor. Duis posuere vestibulum sem nec facilisis. Mauris
-            in lacus sit amet massa facilisis elementum. Suspendisse tempor rutrum viverra. Nam lacus neque, eleifend
-            nec ornare et, pellentesque viverra leo.</p>
+                <p>Maecenas nec diam faucibus, laoreet massa consectetur, consectetur ligula. Nullam porttitor lacinia
+                    porta.
+                    Maecenas ut est quis sapien auctor malesuada. Curabitur fringilla viverra viverra. Cras est urna,
+                    egestas ut
+                    felis ut, lacinia tempor augue. Nulla ac vestibulum justo. In sagittis ex ut est luctus rhoncus.
+                    Pellentesque nisi lorem, interdum eget diam ut, vehicula elementum magna. Aenean justo ipsum,
+                    laoreet quis
+                    augue vitae, rutrum cursus ante. Proin porta commodo sem, eget tristique libero tristique id.</p>
 
-        <p>Aenean molestie pharetra aliquet. Fusce quis bibendum augue. Sed vel accumsan risus, at egestas velit. Nam
-            lacinia libero vel orci rutrum fermentum. Mauris ac risus eu nulla ornare posuere. Aenean placerat rutrum
-            pulvinar. Sed blandit consequat eros. Nam finibus lacus lectus, id consectetur purus accumsan ac. Mauris
-            condimentum nibh a laoreet ullamcorper. Proin neque erat, rhoncus eleifend luctus laoreet, dictum et diam.
-            Aenean posuere ullamcorper lacus semper fermentum. Curabitur malesuada faucibus vestibulum.</p>
+                <p>Pellentesque ac ex elit. Sed varius varius sapien, quis eleifend tortor semper at. Pellentesque
+                    auctor sed
+                    sem nec auctor. Donec ac magna nec augue malesuada sodales. In vitae sapien justo. Proin sed diam a
+                    nunc
+                    imperdiet iaculis ut ac est. Etiam eget tellus ipsum. Donec eleifend quis odio id vehicula. Lorem
+                    ipsum
+                    dolor sit amet, consectetur adipiscing elit. Aenean vulputate mauris sit amet iaculis auctor.
+                    Quisque in
+                    felis nec est venenatis mattis. Phasellus libero enim, condimentum eu ornare vel, feugiat eget
+                    augue.
+                    Pellentesque venenatis maximus nisi eget condimentum.</p>
 
-        <p>Nulla semper diam sed lacus interdum porttitor. Donec pellentesque erat vel justo sodales, a accumsan libero
-            suscipit. Integer euismod sapien vel dui ultricies semper. In hac habitasse platea dictumst. Quisque
-            pulvinar, sem non lacinia lobortis, velit enim consectetur tellus, eu finibus nulla elit sit amet purus.
-            Fusce vitae leo nibh. Sed tincidunt vitae mi sed blandit. Donec sed tellus nec nulla finibus varius in ac
-            turpis. Pellentesque eget libero eget nisl ultrices ornare. Nam malesuada feugiat risus, et pulvinar velit
-            tristique in. Donec ac lacinia nunc, vitae porta lorem. Maecenas turpis quam, tincidunt nec condimentum
-            eget, laoreet vitae dolor. Suspendisse vel auctor ligula.</p>
+                <p>Nulla iaculis quam sit amet nibh mollis facilisis. Pellentesque habitant morbi tristique senectus et
+                    netus et
+                    malesuada fames ac turpis egestas. Cras malesuada sollicitudin finibus. Duis blandit eget risus
+                    vitae
+                    facilisis. Nam tristique ante non diam vestibulum gravida. Vivamus egestas dolor sit amet dapibus
+                    tempor. Ut
+                    at velit malesuada, dapibus mi vestibulum, ultrices dolor. Duis posuere vestibulum sem nec
+                    facilisis. Mauris
+                    in lacus sit amet massa facilisis elementum. Suspendisse tempor rutrum viverra. Nam lacus neque,
+                    eleifend
+                    nec ornare et, pellentesque viverra leo.</p>
+            </div>
+        </div>
     </section>
-    <section>
 </body>
 
 </html>

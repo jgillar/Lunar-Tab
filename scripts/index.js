@@ -7,7 +7,7 @@ $(document).ready(function() {
             earthshine:0, 
             shadowColour: "#1e132c", 
             lightColour: "#c2b9d8", 
-            blur:6
+            blur:2
         });
 
      

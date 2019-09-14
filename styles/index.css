@@ -2,6 +2,7 @@ body {
     background: #0c0119;
     color: #eee6fa;
     font-size: 18px;
+    padding-top: 1rem;
 }
 
 a:hover{
@@ -9,28 +10,21 @@ a:hover{
     color: #cc805a;
 }
 
-#space{
-    height: 100%;
-    left: 0px;
-    position: fixed;
-    top: 0px;
-    width: 100%;
-}
-
 #moon-container{
     height: 500px;
     position: relative;
     width: 500px;
-    margin:  0px auto;
+    margin: 0px auto;
+}
+.moon{
+    height: 200px;
+    width: 200px;
+    border-radius: 50px;
 }
 
-#space{
-    z-index: -1;
-}
-
-/*the Javascript used to draw the moon always leaves a 1px border
- that is extremely noticeable on the dark portion
- this is just a div that is layed over the moon to cover it*/
+/*  the Javascript used to draw the moon always leaves a 1px border
+    that is extremely noticeable on the dark portion
+    this is just a div that is layed over the moon to cover it*/
 #moon-fix{
     background: transparent;
     border:2px solid #0c0119 !important;
@@ -43,10 +37,19 @@ a:hover{
     z-index: 1;
 }
 
-/* these are totally arbitrary, I just chose numbers that made the
-background look pretty without too many gaps/clusters 
-this is unwieldy, might be better to just generate the stars
-using canvas and javascript
+#space{
+    height: 100%;
+    left: 0px;
+    position: fixed;
+    top: 0px;
+    width: 100%;
+    z-index: -1;
+}
+
+/*  these are totally arbitrary, I just chose numbers that made the
+    background look pretty without too many gaps/clusters 
+    this is unwieldy, might be better to just generate the stars
+    using canvas and javascript
 */
 .stars {
     background-image: 
@@ -77,8 +80,78 @@ using canvas and javascript
     height:  100%;
   }
 
-.moon{
-    height: 200px;
-    width: 200px;
-    border-radius: 50px;
+#box-phase{
+    grid-area: phase;
+}#box-moonrise{
+    grid-area: moonrise;
+}#box-moonset{
+    grid-area: moonset;
+}#box-zodiac{
+    grid-area: zodiac;
+}
+#box-hour{
+    grid-area: hour;
+}#box-misc{
+    grid-area: misc;
+    text-align: left;
+}
+#stats-grid{
+    display: grid;
+    grid-gap: 5px;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-areas: "phase phase phase phase"
+                         "moonrise moonset zodiac hour"
+                         "misc misc misc misc";
+    margin: 2rem auto 1rem auto;
+    max-width: 1200px;
+    width: 80%;
+}
+.box{
+    text-align: center;
+}
+/*  can't change fill/stroke for SVGS in external CSS
+    a way around this is to abuse filters */
+.box img{
+    height: 100px;
+    filter: invert(0.75) sepia(1) saturate(2) hue-rotate(190deg);
+}
+
+@media all and (max-width: 900px)  and (min-width: 500px){
+    #stats-grid{
+        grid-template-areas: "phase phase"
+        "moonrise moonset"
+        "zodiac hour"
+        "misc misc";
+        grid-template-columns: 1fr 1fr;
+        margin: 1rem auto;
+    }    
+    #moon-container{
+        transform: scale(.9);
+    }
+    .box{
+        text-align: left;
+    }
+}
+
+@media all and (max-width: 500px)  {
+    #stats-grid{
+        grid-template-columns: 1fr;
+        grid-template-areas: "phase"
+                             "moonrise"
+                             "moonset"
+                             "zodiac"
+                             "hour"
+                             "misc";
+        margin: 0 auto .5rem auto;
+    }
+    /*  moon-container is 500px wide, margin: auto won't center it when 
+        it's wider than its container/the viewport */
+    #moon-container{
+        transform: translateX(-50%)  scale(.7);
+        margin: -6rem auto -2rem auto;
+        left: 50%;
+    }
+    .box{
+        text-align: left;
+    }
 }
