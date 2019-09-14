@@ -3,3 +3,47 @@ body {
     color: #eee6fa;
     font-size: 16px;
 }
+
+a:hover{
+    color: #ffe486;
+    color: #cc805a;
+}
+
+#moon-container{
+    height: 500px;
+    position: relative;
+    width: 500px;
+}
+
+/*the Javascript used to draw the moon always leaves a 1px border
+ that is extremely noticeable on the dark portion
+ this is just a div that is layed over the moon to cover it*/
+#moon-fix{
+    background: transparent;
+    border:2px solid #0c0119 !important;
+    border-radius: 300px;
+    height: 498px;;
+    left: -1px;
+    position: absolute;
+    top: -1px;
+    width: 498px;
+    z-index: 1;
+}
+
+#moon-container div{
+
+}
+
+.moon{
+    height: 200px;
+    width: 200px;
+    border-radius: 50px;
+}
+
+#moon{
+    background: white;
+}
+
+#moon-black{
+    background: pink;
+}
