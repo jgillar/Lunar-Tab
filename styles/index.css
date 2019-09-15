@@ -16,8 +16,9 @@
 body {
     background: #0c0119;
     color: #eee6fa;
-    font-family: 'Source Sans Pro', sans-serif;
+    font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif;
     font-size: 18px;
+    line-height: 1.35;
 }
 
 a:hover{
@@ -29,8 +30,8 @@ a:hover{
     background: linear-gradient(to left,#ffe486,#cc805a);
     border-radius: 0 0 15px 0px;
     color: #333333;
-    margin-bottom: 1rem;
-    max-width: 35%;
+    display: inline-block;
+    margin-bottom: .5rem;
     padding: 1rem;
     position: relative;
     z-index: 10;
@@ -149,7 +150,18 @@ a:hover{
     display: block;
 }
 
-@media all and (max-width: 900px)  and (min-width: 500px){
+@media all and (max-width: 900px)  and (min-width: 500px), all and (max-height: 700px){  
+    #moon-container{
+        transform: scale(.7);
+        margin: -5% auto -5% auto;
+    }
+    .box img{
+        height: 90px;
+        width: 90px;
+    }
+}
+
+@media all and (max-width: 900px) and (min-width: 500px){
     #stats-grid{
         grid-template-areas: "phase phase"
         "moonrise moonset"
@@ -157,13 +169,11 @@ a:hover{
         "misc misc";
         grid-template-columns: 1fr 1fr;
         margin: 1rem auto;
-    }    
-    #moon-container{
-        transform: scale(.9);
-    }
+    }  
 }
 
-@media all and (max-width: 500px)  {
+
+@media all and (max-width: 500px) {
     #stats-grid{
         grid-template-columns: 1fr;
         grid-template-areas: "phase"
