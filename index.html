@@ -8,17 +8,18 @@
     <link rel="stylesheet" href="styles/normalize.css" />
     <link rel="stylesheet" href="styles/index.css" />
     <script type="text/javascript" src="scripts/jquery-3.1.1.min.js"></script>
-    <script type="text/javascript" src="scripts/config.js"></script>
-    <script type="text/javascript" src="scripts/index.js"></script>
+    <script type="text/javascript" src="scripts/config.js"></script>    
     <script src="scripts/js-planet-phase.js"></script>
+    <script src="scripts/suncalc.js"></script>
+    <script type="text/javascript" src="scripts/index.js"></script>
 </head>
 
 <body>
     <section class="no-location-data">
-        <form>
-            <span>Enable geolocation or enter your location here:</span>
-            <input type="text" placeholder="New York, NY" />
-            <input type="submit" value="Search" />
+        <form id="location-form" name="location-form">
+            <label for "location-textbox">Enable geolocation or enter your location here:</span>
+            <input type="text" id="location-textbox" name="location-textbox" placeholder="New York, NY" />
+            <input type="submit" id="location-submit" name="location-submit" value="Search" />
         </form>
     </section>
     
