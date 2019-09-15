@@ -18,7 +18,6 @@ body {
     color: #eee6fa;
     font-family: 'Source Sans Pro', sans-serif;
     font-size: 18px;
-    padding-top: 2rem;
 }
 
 a:hover{
@@ -26,6 +25,17 @@ a:hover{
     color: #cc805a;
 }
 
+.no-location-data{
+    background: linear-gradient(to left,#ffe486,#cc805a);
+    border-radius: 0 0 15px 0px;
+    color: #333333;
+    margin-bottom: 1rem;
+    max-width: 35%;
+    padding: 1rem;
+    position: relative;
+    z-index: 10;
+    width: auto;
+}
 #moon-container{
     height: 500px;
     position: relative;
