@@ -37,6 +37,16 @@ a:hover{
     z-index: 10;
     width: auto;
 }
+#location-textbox{
+    background: transparent;
+    border: none;
+    border-bottom: 1px dashed white;
+    outline: none;
+}
+#location-textbox:focus{
+    border-bottom: 1px solid black;
+}
+
 #moon-container{
     height: 500px;
     position: relative;
