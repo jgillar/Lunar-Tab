@@ -85,6 +85,9 @@ window.addEventListener("load", function () {
     };
 
     populateMoonStats();
+
+
+    
     /* just a simple object for handling API calls
         @buildQuery  builds up a query string 
         @send        ajax request to the api, returns null on error or long/lat pair on success

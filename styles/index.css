@@ -52,6 +52,7 @@ a:hover{
     position: relative;
     width: 500px;
     margin: 0px auto;
+    transform-box: view-box;
 }
 .moon{
     height: 200px;
@@ -72,6 +73,30 @@ a:hover{
     top: 0;
     width: 498px;
     z-index: 1;
+}
+#moon-craters{
+    mix-blend-mode: color-burn;
+    mix-blend-mode: multiply;
+}
+.crater{
+    width: 75px;
+    height: 75px;
+    border-radius: 75px;
+    background-color: #8e82a6;
+    position: absolute;
+}
+.crater:nth-child(1){
+    top: 200px;
+    right: 100px;
+}
+.crater:nth-child(2){
+    top: 350px;
+    left: 150px;
+}
+.crater:nth-child(3){
+    top: 250px;
+    right: 80px;
+    transform: skew(-5deg, -5deg);
 }
 
 #space{
