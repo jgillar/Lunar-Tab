@@ -3,19 +3,49 @@ window.addEventListener("load", function () {
     document.getElementById("location-form").addEventListener("submit", function (event) {
         event.preventDefault();
         geocoder.send(document.getElementById("location-textbox").value);
+        populateMoonStats();
     });
 
     //return time in 12-hour format along with AM/PM as a string
-    let timeToString = (time) => {
+    let timeToString = function(time) {
         return "" + time.getHours() % 12 + ":" + time.getMinutes() + " " + (time.getHours() > 12 ? "PM" : "AM");
     };
 
     // populates the moonrise, moonset, etc. containers
-    let populateMoonStats = () => {
-        let times = SunCalc.getMoonTimes(new Date(), 51.5, -0.1);
-        console.log(times);
+    let populateMoonStats = function() {
+        let times = SunCalc.getMoonTimes(new Date(), window.localStorage.latitude, window.localStorage.longitude);
         document.querySelector("#box-moonrise span:nth-child(2)").innerHTML = timeToString(times.rise);
         document.querySelector("#box-moonset span:nth-child(2)").innerHTML = timeToString(times.set);
+ 
+        let illumination = SunCalc.getMoonIllumination(new Date());
+        document.querySelector("#box-phase span:first-child").innerHTML = ((phase) => {
+            if(phase === 0)
+                return "New Moon";
+            else if(phase < .25)
+                return "Waxing Crescent";
+            else if(phase === .25)
+                return "First Quarter";
+            else if(phase < .5)
+                return "Waxing Gibbous";
+            else if(phase === .5)
+                return "Full Moon";
+            else if(phase < .75)
+                return "Waning Gibbous";
+            else if(phase === .75)
+                return "Last Quarter";
+            else
+                return "Waning Crescent";
+        })();
+        document.querySelector("#box-phase span:nth-child(2)").innerHTML = Math.round(illumination.fraction * 100) + "%";
+        drawPlanetPhase(
+            document.getElementById("moon"), illumination.fraction, false,
+            {
+                diameter: 500,
+                earthshine: 0,
+                shadowColour: "#1e132c",
+                lightColour: "#c2b9d8",
+                blur: 2
+            });
     };
 
     populateMoonStats();
@@ -36,7 +66,6 @@ window.addEventListener("load", function () {
             request.addEventListener("load", (event) => {
                 if (event.target.status === 200) {
                     let responseObj = JSON.parse(event.target.responseText);
-                    console.dir(responseObj.results[0]);
 
 
 
@@ -65,23 +94,4 @@ window.addEventListener("load", function () {
             request.send();
         }
     };
-
-    let localStorage = window.localStorage;
-    //if we already got the user's location at some point, then use that
-    if(localStorage.getItem("address") !== null){
-        
-    }
-
-
-
-
-    drawPlanetPhase(
-        document.getElementById("moon"), 0.33, false,
-        {
-            diameter: 500,
-            earthshine: 0,
-            shadowColour: "#1e132c",
-            lightColour: "#c2b9d8",
-            blur: 2
-        });
 });
