@@ -28,26 +28,38 @@ a:hover{
 
 #location-data{
     background: linear-gradient(to left,#ffe486,#cc805a);
+    background: linear-gradient(to left,#ffe486,hsla(20, 70%, 65%, 1));
     border-radius: 0 0 15px 0px;
-    color: #333333;
     display: inline-block;
     margin-bottom: 1rem;
     padding: 1rem;
     position: relative;
     z-index: 10;
     width: auto;
+    color: #0c0119;
 }
 #location-textbox{
     background: transparent;
     border: none;
-    border-bottom: 1px dashed white;
+    border-bottom: 1px solid #0c0119;
     outline: none;
+    text-overflow: ellipsis;
 }
 #location-textbox:focus{
-    border-bottom: 1px solid black;
+    border-bottom: 1px solid #ffffff;
 }
 #location-submit{
     cursor: pointer;
+    background-image: url("../svg/wi-refresh.svg");
+    display: inline-block;
+    filter: invert(0.1) sepia(1) saturate(10) hue-rotate(211deg);
+    background-color: transparent;
+    border:  none;
+    background-repeat: no-repeat;
+    color:  transparent;
+    background-size: contain;
+    height: 1em;
+    width: 1em;
 }
 
 #moon-container{
