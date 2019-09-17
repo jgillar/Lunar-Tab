@@ -31,8 +31,8 @@ window.addEventListener("load", function () {
             hourNumber,
             planetaryHour = {};
 
-            console.log("sunrise sunset");
-            console.log(sunriseTime, sunsetTime);
+        console.log("sunrise sunset");
+        console.log(sunriseTime, sunsetTime);
         //NEED TO FIX
         //DOESN'T WORK CORRECTLY WHEN DATE IS NEXT DAY BUT BEFORE SUNRISE
         //3:00 AM TUESDAY IS STILL LUNAR MONDAY
@@ -44,17 +44,17 @@ window.addEventListener("load", function () {
         dayOfTheWeekIndex = chaldeanSequence.indexOf(dayOfTheWeek);
         chaldeanChunk = chaldeanSequence.splice(0, dayOfTheWeekIndex);
         chaldeanSequence.push(...chaldeanChunk);
-        
+
         //there are 12 'planetary hours' during the day and 12 at night
         let date2 = new Date();
-        date2.setDate( date.getDate() + 1);
+        date2.setDate(date.getDate() + 1);
         let tomorrow = SunCalc.getTimes(date2, window.localStorage.latitude, window.localStorage.longitude);
         dayLength = Math.round(Math.abs(sunsetTime - sunriseTime));
         nightLength = Math.round(Math.abs(sunsetTime - tomorrow.sunrise.getTime()));
 
         //the length of an day hour + the length of a night hour ALWAYS sum to 120 minutes
-        let dayHourLength = Math.round(dayLength/12);
-        let nightHourLength = (Math.abs(120*60*1000 - dayHourLength));
+        let dayHourLength = Math.round(dayLength / 12);
+        let nightHourLength = (Math.abs(120 * 60 * 1000 - dayHourLength));
 
         //there are 12 equal length hours
         //to find which one the current hour sits in we just need to divide by
@@ -72,23 +72,17 @@ window.addEventListener("load", function () {
         planetaryHour.hour = hourNumber;
         planetaryHour.name = weekSequence[chaldeanSequence[hourNumber % 7]];
 
-        console.log(dayHourLength, nightHourLength);
-        console.log(dayHourLength/60000, nightHourLength/60000);
-
-        console.log(planetaryHour);
-
         for (let x = 0; x < 24; x++) {
-            if(x === 12)
-            console.log("\n");
+            if (x === 12)
+                console.log("\n");
             if (x < 12)
                 console.log(x, weekSequence[chaldeanSequence[x % 7]], new Date(sunriseTime + x * dayHourLength));
-                else
-
-                    console.log(x, weekSequence[chaldeanSequence[x % 7]], new Date(sunsetTime + x%12 * nightHourLength));
+            else
+                console.log(x, weekSequence[chaldeanSequence[x % 7]], new Date(sunsetTime + x % 12 * nightHourLength));
         }
-    }
 
-    getPlanetaryHour(new Date());
+        return planetaryHour;
+    }
 
     //get the astrological sign
     let getAstroSign = (date) => {
@@ -147,7 +141,8 @@ window.addEventListener("load", function () {
     let populateMoonStats = (date) => {
         let times,
             illumination,
-            astroSign;
+            astroSign,
+            planetaryHour;
 
         times = SunCalc.getMoonTimes(date, window.localStorage.latitude, window.localStorage.longitude);
         document.querySelector("#box-moonrise span:nth-child(2)").innerHTML = timeToString(times.rise);
@@ -155,11 +150,21 @@ window.addEventListener("load", function () {
 
         illumination = SunCalc.getMoonIllumination(date);
         document.querySelector("#box-phase span:first-child").innerHTML = getPhaseName(illumination.phase);
-        document.querySelector("#box-phase span:nth-child(2)").innerHTML = Math.round(illumination.fraction * 100) + "%";
+        document.querySelector("#box-phase span:nth-child(2)").innerHTML = Math.round(illumination.fraction * 100) + "% illuminated";
 
         astroSign = getAstroSign(date);
-        document.querySelector("#box-zodiac span:nth-child(2)").innerHTML = astroSign + ", " + Math.round(0) + "&#176;";
+        document.querySelector("#box-zodiac span:nth-child(2)").innerHTML = astroSign;
         document.querySelector("#box-zodiac img").src = "svg/" + astroSign + ".svg#svgView(viewBox(-4,-4,24,24))";
+        document.querySelector("#box-zodiac img").title =  astroSign;
+
+        planetaryHour = getPlanetaryHour(date);
+        document.querySelector("#box-hour span:nth-child(2)").innerHTML = 
+            planetaryHour.name + ", " 
+            + planetaryHour.hourStart.getHours() + ":" + planetaryHour.hourStart.getMinutes() + " - " 
+            + planetaryHour.hourEnd.getHours() + ":" + planetaryHour.hourEnd.getMinutes();
+        document.querySelector("#box-hour img").src = "svg/" + planetaryHour.name + ".svg#svgView(viewBox(-4,-4,24,24))";
+        document.querySelector("#box-hour img").title =  planetaryHour.name;
+
         drawPlanetPhase(
             document.getElementById("moon"), illumination.fraction, false,
             {

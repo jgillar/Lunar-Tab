@@ -185,7 +185,7 @@ a:hover{
     display: block;
 }
 
-@media all and (max-width: 900px)  and (min-width: 500px), all and (max-height: 700px){  
+@media all and (max-width: 900px)  and (min-width: 500px), all and (max-height: 650px){  
     #moon-container{
         transform: scale(.7);
         margin: -5% auto -5% auto;
@@ -222,8 +222,8 @@ a:hover{
     /*  moon-container is 500px wide, margin: auto won't center it when 
         it's wider than its container/the viewport */
     #moon-container{
-        transform: translateX(-50%)  scale(.7);
-        margin: -6rem auto -2rem auto;
+        transform: translateX(-50%)  scale(.65);
+        margin: -5rem auto -2.75rem auto;
         left: 50%;
     }
     .box:not(:first-child){
