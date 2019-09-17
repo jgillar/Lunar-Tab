@@ -2,11 +2,6 @@
     shows moonrise, moonset and some astrological info if you're into that sort of thing 
 */
 
-//return time in 12-hour format along with AM/PM as a string
-let timeToString = (time) => {
-    return "" + time.getHours() % 12 + ":" + time.getMinutes() + " " + (time.getHours() > 12 ? "PM" : "AM");
-};
-
 //get the current planetary hour
 //returns an object containing the name of the 'ruler' of the hour and interval
 let getPlanetaryHour = (date) => {
@@ -136,8 +131,20 @@ let populateMoonStats = (date) => {
         astroSign,
         planetaryHour;
 
+    //return time in 12-hour format along with AM/PM as a string
+    let timeToString = function (time) {
+        console.log(time);
+        return "" + time.getHours() % 12 + ":" + time.getMinutes() + " " + (time.getHours() > 12 ? "PM" : "AM");
+    };
+
+    console.log(date);
     times = SunCalc.getMoonTimes(date, window.localStorage.latitude, window.localStorage.longitude);
-    document.querySelector("#box-moonrise span:nth-child(2)").innerHTML = timeToString(times.rise);
+    console.log(times);
+    //okay I have no idea what's going on here
+    //sometimes SunCalc will return an object with no rise property, it seems random
+    //I tried 
+    if (times.rise)
+        document.querySelector("#box-moonrise span:nth-child(2)").innerHTML = timeToString(times.rise);
     document.querySelector("#box-moonset span:nth-child(2)").innerHTML = timeToString(times.set);
 
     illumination = SunCalc.getMoonIllumination(date);
@@ -213,13 +220,15 @@ let geocoder = {
 window.addEventListener("load", function () {
     /* submit button event listener for the location search box */
     document.getElementById("location-form").addEventListener("submit", function (event) {
-        let date = new Date();
-        geocoder.send(document.getElementById("location-textbox").value);
-        populateMoonStats(date);
         event.preventDefault();
+        result = geocoder.send(document.getElementById("location-textbox").value);
     });
 
-    populateMoonStats(new Date());
-
-
+    //if the user entered their address already at some point then show moon info
+    //otherwise just show NY as a deafult
+    if (window.localStorage.address != null)
+        populateMoonStats(new Date());
+    else{
+        populateMoonStats(new Date());
+    }
 });

@@ -84,10 +84,10 @@ a:hover{
     position: absolute;
 }
 .crater:nth-child(1){
-    height: 75px;
+    height: 65px;
     right: 70px;
-    top: 185px;
-    width: 75px;
+    top: 179px;
+    width: 65px;
 }
 .crater:nth-child(2){
     height: 115px;
