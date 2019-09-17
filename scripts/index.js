@@ -4,10 +4,10 @@
 
 //get the current planetary hour
 //returns an object containing the name of the 'ruler' of the hour and interval
-let getPlanetaryHour = (date) => {
+let getPlanetaryHour = (date, location) => {
     date.setSeconds(0);
-    let sun = SunCalc.getTimes(date, window.localStorage.latitude, window.localStorage.longitude),
-        moon = SunCalc.getMoonTimes(date, window.localStorage.latitude, window.localStorage.longitude),
+    let sun = SunCalc.getTimes(date, location.latitude, location.longitude),
+        moon = SunCalc.getMoonTimes(date, location.latitude, location.longitude),
         sunriseTime = new Date(sun.sunrise.setSeconds(0)).getTime(),
         sunsetTime = new Date(sun.sunset.setSeconds(0)).getTime(),
         chaldeanSequence = [6, 4, 2, 0, 5, 3, 1], //Saturn, Jupiter, etc. 
@@ -35,7 +35,7 @@ let getPlanetaryHour = (date) => {
     //there are 12 'planetary hours' during the day and 12 at night
     let date2 = new Date();
     date2.setDate(date.getDate() + 1);
-    let tomorrow = SunCalc.getTimes(date2, window.localStorage.latitude, window.localStorage.longitude);
+    let tomorrow = SunCalc.getTimes(date2, location.latitude, location.longitude);
     dayLength = Math.round(Math.abs(sunsetTime - sunriseTime));
     nightLength = Math.round(Math.abs(sunsetTime - tomorrow.sunrise.getTime()));
 
@@ -125,7 +125,7 @@ let getPhaseName = (phase) => {
 }
 
 // populates the moonrise, moonset, etc. containers
-let populateMoonStats = (date) => {
+let populateMoonStats = (date, location) => {
     let times,
         illumination,
         astroSign,
@@ -138,11 +138,11 @@ let populateMoonStats = (date) => {
     };
 
     console.log(date);
-    times = SunCalc.getMoonTimes(date, window.localStorage.latitude, window.localStorage.longitude);
+    times = SunCalc.getMoonTimes(date, location.latitude, location.longitude);
     console.log(times);
     //okay I have no idea what's going on here
     //sometimes SunCalc will return an object with no rise property, it seems random
-    //I tried 
+    //sometimes it will happen to the same location
     if (times.rise)
         document.querySelector("#box-moonrise span:nth-child(2)").innerHTML = timeToString(times.rise);
     document.querySelector("#box-moonset span:nth-child(2)").innerHTML = timeToString(times.set);
@@ -156,7 +156,7 @@ let populateMoonStats = (date) => {
     document.querySelector("#box-zodiac img").src = "svg/" + astroSign + ".svg#svgView(viewBox(-4,-4,24,24))";
     document.querySelector("#box-zodiac img").title = astroSign;
 
-    planetaryHour = getPlanetaryHour(date);
+    planetaryHour = getPlanetaryHour(date, location);
     document.querySelector("#box-hour span:nth-child(2)").innerHTML =
         planetaryHour.name + ", "
         + planetaryHour.hourStart.getHours() + ":" + planetaryHour.hourStart.getMinutes() + " - "
@@ -175,40 +175,18 @@ let populateMoonStats = (date) => {
         });
 };
 
-/* just a simple object for handling API calls
-    @buildQuery  builds up a query string 
-    @send        ajax request to the api, returns null on error or long/lat pair on success
-*/
+//just a simple object for handling API calls
 let geocoder = {
     url: "https://maps.googleapis.com/maps/api/geocode/json?",
     key: CONFIG.key,
     buildQuery: function (value) {
         return this.url + encodeURI("address=" + value + "&key=" + CONFIG.key);
     },
-    send: function (value) {
+    send: function (value, callback) {
         let request = new XMLHttpRequest();
         //successful request 
         request.addEventListener("load", (event) => {
-            if (event.target.status === 200) {
-                let responseObj = JSON.parse(event.target.responseText),
-                    localStorage = window.localStorage;
-                //store the long/lat coords and location name for quick access
-                console.log("localstorage");
-                localStorage.setItem("longitude", responseObj.results[0].geometry.location.lng);
-                localStorage.setItem("latitude", responseObj.results[0].geometry.location.lat);
-                localStorage.setItem("address", responseObj.results[0].formatted_address);
-                console.log(localStorage);
-            }
-            //request denied, over daily API limit, etc. misc errors
-            else {
-                return null;
-            }
-            return event.target.responseText;
-        });
-
-        //error, couldn't send request
-        request.addEventListener("error", (event) => {
-            return null;
+            callback(event);
         });
 
         request.open("POST", this.buildQuery(value));
@@ -218,17 +196,39 @@ let geocoder = {
 };
 
 window.addEventListener("load", function () {
+
     /* submit button event listener for the location search box */
     document.getElementById("location-form").addEventListener("submit", function (event) {
         event.preventDefault();
-        result = geocoder.send(document.getElementById("location-textbox").value);
+        geocoder.send(document.getElementById("location-textbox").value, function (event) {
+            let responseObj = JSON.parse(event.target.responseText),
+                localStorage = window.localStorage;
+
+            //store the long/lat coords and location name for quick access
+            localStorage.setItem("longitude", responseObj.results[0].geometry.location.lng);
+            localStorage.setItem("latitude", responseObj.results[0].geometry.location.lat);
+            localStorage.setItem("address", responseObj.results[0].formatted_address);
+
+            //show the results on the page
+            populateMoonStats(new Date(), localStorage);
+        });
     });
 
     //if the user entered their address already at some point then show moon info
-    //otherwise just show NY as a deafult
-    if (window.localStorage.address != null)
-        populateMoonStats(new Date());
+    //otherwise just show New York as a deafult
+    if (window.localStorage.address != null){
+        document.getElementById("location-textbox").value = window.localStorage.address;
+        populateMoonStats(new Date(), window.localStorage);
+    }
     else{
-        populateMoonStats(new Date());
+        geocoder.send("Manhattan, NY", function (event) {
+            let responseObj = JSON.parse(event.target.responseText),
+                location = {};
+            location.address = responseObj.results[0].formatted_address;
+            location.longitude = responseObj.results[0].geometry.location.lng;
+            location.latitude = responseObj.results[0].geometry.location.lat;
+
+            populateMoonStats(new Date(), location);
+        });
     }
 });
