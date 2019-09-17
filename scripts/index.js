@@ -124,6 +124,11 @@ let getPhaseName = (phase) => {
         return "Waning Crescent";
 }
 
+    //return time in 12-hour format along with AM/PM as a string
+    let timeToString = function (time) {
+        return "" + time.getHours() % 12 + ":" + (time.getMinutes() < 10 ? "0" + time.getMinutes() : time.getMinutes()) + " " + (time.getHours() > 12 ? "PM" : "AM");
+    };
+
 // populates the moonrise, moonset, etc. containers
 let populateMoonStats = (date, location) => {
     let times,
@@ -131,15 +136,8 @@ let populateMoonStats = (date, location) => {
         astroSign,
         planetaryHour;
 
-    //return time in 12-hour format along with AM/PM as a string
-    let timeToString = function (time) {
-        console.log(time);
-        return "" + time.getHours() % 12 + ":" + time.getMinutes() + " " + (time.getHours() > 12 ? "PM" : "AM");
-    };
-
-    console.log(date);
     times = SunCalc.getMoonTimes(date, location.latitude, location.longitude);
-    console.log(times);
+
     //okay I have no idea what's going on here
     //sometimes SunCalc will return an object with no rise property, it seems random
     //sometimes it will happen to the same location
@@ -157,10 +155,10 @@ let populateMoonStats = (date, location) => {
     document.querySelector("#box-zodiac img").title = astroSign;
 
     planetaryHour = getPlanetaryHour(date, location);
+
     document.querySelector("#box-hour span:nth-child(2)").innerHTML =
-        planetaryHour.name + ", "
-        + planetaryHour.hourStart.getHours() + ":" + planetaryHour.hourStart.getMinutes() + " - "
-        + planetaryHour.hourEnd.getHours() + ":" + planetaryHour.hourEnd.getMinutes();
+         planetaryHour.name + ", "
+         + timeToString(planetaryHour.hourStart) + " - " + timeToString(planetaryHour.hourEnd);
     document.querySelector("#box-hour img").src = "svg/" + planetaryHour.name + ".svg#svgView(viewBox(-4,-4,24,24))";
     document.querySelector("#box-hour img").title = planetaryHour.name;
 
@@ -173,6 +171,7 @@ let populateMoonStats = (date, location) => {
             lightColour: "#c2b9d8",
             blur: 2
         });
+    document.getElementById("moon-craters").style.display = "block";
 };
 
 //just a simple object for handling API calls
