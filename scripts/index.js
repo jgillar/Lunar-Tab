@@ -2,10 +2,9 @@ window.addEventListener("load", function () {
     /* submit button event listener for the location search box */
     document.getElementById("location-form").addEventListener("submit", function (event) {
         let date = new Date();
-        date.setDate(date.getDate() + 5);
-        event.preventDefault();
         geocoder.send(document.getElementById("location-textbox").value);
         populateMoonStats(date);
+        event.preventDefault();
     });
 
     //return time in 12-hour format along with AM/PM as a string
@@ -16,8 +15,11 @@ window.addEventListener("load", function () {
     //get the current planetary hour
     //returns an object containing the name of the 'ruler' of the hour and interval
     let getPlanetaryHour = (date) => {
+        date.setSeconds(0);
         let sun = SunCalc.getTimes(date, window.localStorage.latitude, window.localStorage.longitude),
             moon = SunCalc.getMoonTimes(date, window.localStorage.latitude, window.localStorage.longitude),
+            sunriseTime = new Date(sun.sunrise.setSeconds(0)).getTime(),
+            sunsetTime = new Date(sun.sunset.setSeconds(0)).getTime(),
             chaldeanSequence = [6, 4, 2, 0, 5, 3, 1], //Saturn, Jupiter, etc. 
             weekSequence = ["Sun", "Moon", "Mars", "Mercury", "Jupiter", "Venus", "Saturn"],
             dayOfTheWeek = date.getDay(),
@@ -26,44 +28,64 @@ window.addEventListener("load", function () {
             nightLength,
             dayOfTheWeekIndex,
             chaldeanChunk,
-            hourLength,
             hourNumber,
             planetaryHour = {};
+
+            console.log("sunrise sunset");
+            console.log(sunriseTime, sunsetTime);
+        //NEED TO FIX
+        //DOESN'T WORK CORRECTLY WHEN DATE IS NEXT DAY BUT BEFORE SUNRISE
+        //3:00 AM TUESDAY IS STILL LUNAR MONDAY
+        //NEED TO HANDLE THIS
+
 
         //the Chaldean Sequence repeats every day starting with the day's 'ruling planet'
         //shift the chaldean sequence array to start with the day's 'ruler'
         dayOfTheWeekIndex = chaldeanSequence.indexOf(dayOfTheWeek);
         chaldeanChunk = chaldeanSequence.splice(0, dayOfTheWeekIndex);
         chaldeanSequence.push(...chaldeanChunk);
-
+        
         //there are 12 'planetary hours' during the day and 12 at night
-        dayLength = Math.abs(sun.sunrise.getTime() - sun.sunset.getTime());
-        nightLength = Math.abs(moon.rise.getTime() - moon.set.getTime());
+        let date2 = new Date();
+        date2.setDate( date.getDate() + 1);
+        let tomorrow = SunCalc.getTimes(date2, window.localStorage.latitude, window.localStorage.longitude);
+        dayLength = Math.round(Math.abs(sunsetTime - sunriseTime));
+        nightLength = Math.round(Math.abs(sunsetTime - tomorrow.sunrise.getTime()));
+
+        //the length of an day hour + the length of a night hour ALWAYS sum to 120 minutes
+        let dayHourLength = Math.round(dayLength/12);
+        let nightHourLength = (Math.abs(120*60*1000 - dayHourLength));
 
         //there are 12 equal length hours
         //to find which one the current hour sits in we just need to divide by
         //the length of the hour length 
-        if (currentTime < moon.rise.getTime()) {
-            hourLength = dayLength / 12;
-            hourNumber = Math.floor((currentTime - sun.sunrise.getTime()) / hourLength);
-            planetaryHour.hourStart = sun.sunrise.getTime() + hourNumber * hourLength;
-            planetaryHour.hourEnd = planetaryHour.hourStart + hourLength;
+        if (currentTime < sunsetTime) {
+            hourNumber = Math.floor((currentTime - sunriseTime) / dayHourLength);
+            planetaryHour.hourStart = new Date(sunriseTime + hourNumber * dayHourLength);
+            planetaryHour.hourEnd = new Date(planetaryHour.hourStart.getTime() + dayHourLength);
         }
         else {
-            hourLength = nightLength / 12;
-            hourNumber = Math.floor((currentTime - moon.rise.getTime()) / hourLength);
-            planetaryHour.hourStart = moon.rise.getTime() + hourNumber * hourLength;
-            planetaryHour.hourEnd = planetaryHour.hourStart + hourLength;
+            hourNumber = Math.floor((currentTime - sunsetTime) / nightHourLength);
+            planetaryHour.hourStart = new Date(sunsetTime + hourNumber * nightHourLength);
+            planetaryHour.hourEnd = new Date(planetaryHour.hourStart + nightHourLength);
         }
+        planetaryHour.hour = hourNumber;
         planetaryHour.name = weekSequence[chaldeanSequence[hourNumber % 7]];
+
+        console.log(dayHourLength, nightHourLength);
+        console.log(dayHourLength/60000, nightHourLength/60000);
+
         console.log(planetaryHour);
 
-        // for (let x = 0; x < 24; x++) {
-        //     if (x < 12)
-        //         console.log(x, weekSequence[chaldeanSequence[x % 7]], new Date(sun.sunrise.getTime() + x * hourLength));
-        //     else
-        //         console.log(x, weekSequence[chaldeanSequence[x % 7]], new Date(moon.rise.getTime() + x * hourLength));
-        // }
+        for (let x = 0; x < 24; x++) {
+            if(x === 12)
+            console.log("\n");
+            if (x < 12)
+                console.log(x, weekSequence[chaldeanSequence[x % 7]], new Date(sunriseTime + x * dayHourLength));
+                else
+
+                    console.log(x, weekSequence[chaldeanSequence[x % 7]], new Date(sunsetTime + x%12 * nightHourLength));
+        }
     }
 
     getPlanetaryHour(new Date());
