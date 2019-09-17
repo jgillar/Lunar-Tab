@@ -78,25 +78,52 @@ a:hover{
     mix-blend-mode: color-burn;
     mix-blend-mode: multiply;
 }
-.crater{
-    width: 75px;
-    height: 75px;
-    border-radius: 75px;
+.crater, .crater:before, .crater:after{
+    border-radius: 100px;
     background-color: #bfb3d8;
     position: absolute;
 }
 .crater:nth-child(1){
-    top: 200px;
-    right: 100px;
+    height: 75px;
+    right: 70px;
+    top: 185px;
+    width: 75px;
 }
 .crater:nth-child(2){
-    top: 350px;
-    left: 150px;
+    height: 115px;
+    top: 300px;
+    left: 90px;
+    width: 115px;
 }
 .crater:nth-child(3){
-    top: 250px;
-    right: 80px;
-    transform: skew(-5deg, -5deg);
+    height: 100px;
+    top: 212px;
+    right: 29px;
+    /* transform: skew(-5deg, -5deg); */
+    width: 100px;
+}
+.crater-cluster{
+    height: 50px;
+    top: 75px;
+    left: 101px;
+    width: 50px;
+    /* background-color: cyan; */
+}
+.crater-cluster::before{
+    content: "";
+    display: block;
+    height: 25px;
+    width: 25px;
+    top: 70px;
+    left: 10px;
+}
+.crater-cluster::after{
+    content: "";
+    display: block;
+    height: 30px;
+    width: 30px;
+    top: 10px;
+    left: 65px;
 }
 
 #space{
