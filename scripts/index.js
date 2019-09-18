@@ -5,9 +5,7 @@
 //get the current planetary hour
 //returns an object containing the name of the 'ruler' of the hour and interval
 let getPlanetaryHour = (date, location) => {
-    date.setSeconds(0);
     let sun = SunCalc.getTimes(date, location.latitude, location.longitude),
-        moon = SunCalc.getMoonTimes(date, location.latitude, location.longitude),
         sunriseTime = new Date(sun.sunrise.setSeconds(0)).getTime(),
         sunsetTime = new Date(sun.sunset.setSeconds(0)).getTime(),
         chaldeanSequence = [6, 4, 2, 0, 5, 3, 1], //Saturn, Jupiter, etc. 
@@ -19,6 +17,12 @@ let getPlanetaryHour = (date, location) => {
         chaldeanChunk,
         hourNumber,
         planetaryHour = {};
+
+    //the date is passed in but it needs to be manipulated for calculations
+    //not a good idea to alter it so just make a new object instead 
+    //(JS is pass by reference and assign by value for objects)
+    date = new Date(date.getTime());
+    date.setSeconds(0);
 
     //planetary 'days' don't start and end at midnight, they start/end at sunrise
     //so if it's before sunrise, it's still considered "yesterday" night
@@ -36,7 +40,6 @@ let getPlanetaryHour = (date, location) => {
     dayOfTheWeekIndex = chaldeanSequence.indexOf(dayOfTheWeek);
     chaldeanChunk = chaldeanSequence.splice(0, dayOfTheWeekIndex);
     chaldeanSequence.push(...chaldeanChunk);
-    console.log(chaldeanSequence);
 
     //there are 12 'planetary hours' during the day and 12 at night
     let tomorrow = new Date();
@@ -67,9 +70,6 @@ let getPlanetaryHour = (date, location) => {
 
     planetaryHour.hour = hourNumber;
     planetaryHour.name = weekSequence[chaldeanSequence[hourNumber % 7]];
-    console.log(planetaryHour);
-    console.log(dayHourLength, nightHourLength);
-    console.log(dayHourLength / (60*1000), nightHourLength / (60*1000));
 
     // for (let x = 0; x < 24; x++) {
     //     if (x === 12)
@@ -207,14 +207,24 @@ let geocoder = {
 };
 
 window.addEventListener("load", function () {
-
-    /* submit button event listener for the location search box */
+    //submit button event listener for the location search box 
+    let locationTextbox = document.getElementById("location-textbox");
     document.getElementById("location-form").addEventListener("submit", function (event) {
         event.preventDefault();
-        geocoder.send(document.getElementById("location-textbox").value, function (event) {
+        geocoder.send(locationTextbox.value, function (event) {
             let responseObj = JSON.parse(event.target.responseText),
-                localStorage = window.localStorage;
-
+                localStorage = window.localStorage,
+                locationDiv = document.getElementById("location-data");
+            
+            if(responseObj.status === "ZERO_RESULTS"){
+                console.log('no results');
+                locationDiv.className += " location-error";
+                return; 
+            }
+            else{
+                let s = locationTextbox.className.replace("/location-error/g", "");
+                locationDiv.className = s;
+            }
             //store the long/lat coords and location name for quick access
             localStorage.setItem("longitude", responseObj.results[0].geometry.location.lng);
             localStorage.setItem("latitude", responseObj.results[0].geometry.location.lat);
@@ -228,14 +238,13 @@ window.addEventListener("load", function () {
     //if the user entered their address already at some point then show moon info
     //otherwise just show New York as a deafult
     if (window.localStorage.address != null) {
+
         document.getElementById("location-textbox").value = window.localStorage.address;
         let date = new Date();
-        date.setHours(3);
-        console.log(date);
         populateMoonStats(date, window.localStorage);
     }
     else {
-        document.getElementById("location-textbox").value - "Manhattan, NY";
+        document.getElementById("location-textbox").value = "Manhattan, NY";
         geocoder.send("Manhattan, NY", function (event) {
             let responseObj = JSON.parse(event.target.responseText),
                 location = {};
