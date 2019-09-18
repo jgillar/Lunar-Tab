@@ -23,8 +23,7 @@ let getPlanetaryHour = (date, location) => {
     //planetary 'days' don't start and end at midnight, they start/end at sunrise
     //so if it's before sunrise, it's still considered "yesterday" night
     if(currentTime < sunriseTime){
-        console.log("it's still yesterday");
-        date = new Date(date.getDate() - 1);
+        date.setDate(date.getDate() - 1);
         date.setSeconds(0);
         sun = SunCalc.getTimes(date, location.latitude, location.longitude);
         sunriseTime = new Date(sun.sunrise.setSeconds(0)).getTime();
@@ -230,7 +229,10 @@ window.addEventListener("load", function () {
     //otherwise just show New York as a deafult
     if (window.localStorage.address != null) {
         document.getElementById("location-textbox").value = window.localStorage.address;
-        populateMoonStats(new Date(), window.localStorage);
+        let date = new Date();
+        date.setHours(3);
+        console.log(date);
+        populateMoonStats(date, window.localStorage);
     }
     else {
         document.getElementById("location-textbox").value - "Manhattan, NY";
