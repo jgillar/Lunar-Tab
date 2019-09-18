@@ -15,29 +15,36 @@ let getPlanetaryHour = (date, location) => {
         dayOfTheWeek = date.getDay(),
         currentTime = date.getTime(),
         dayLength,
-        nightLength,
         dayOfTheWeekIndex,
         chaldeanChunk,
         hourNumber,
         planetaryHour = {};
 
-    //NEED TO FIX
-    //DOESN'T WORK CORRECTLY WHEN DATE IS NEXT DAY BUT BEFORE SUNRISE
-    //3:00 AM TUESDAY IS STILL LUNAR MONDAY
-    //NEED TO HANDLE THIS
+    //planetary 'days' don't start and end at midnight, they start/end at sunrise
+    //so if it's before sunrise, it's still considered "yesterday" night
+    if(currentTime < sunriseTime){
+        console.log("it's still yesterday");
+        date = new Date(date.getDate() - 1);
+        date.setSeconds(0);
+        sun = SunCalc.getTimes(date, location.latitude, location.longitude);
+        sunriseTime = new Date(sun.sunrise.setSeconds(0)).getTime();
+        sunsetTime = new Date(sun.sunset.setSeconds(0)).getTime();
+        dayOfTheWeek = date.getDay();
+    }
 
     //the Chaldean Sequence repeats every day starting with the day's 'ruling planet'
     //shift the chaldean sequence array to start with the day's 'ruler'
     dayOfTheWeekIndex = chaldeanSequence.indexOf(dayOfTheWeek);
     chaldeanChunk = chaldeanSequence.splice(0, dayOfTheWeekIndex);
     chaldeanSequence.push(...chaldeanChunk);
+    console.log(chaldeanSequence);
 
     //there are 12 'planetary hours' during the day and 12 at night
-    let date2 = new Date();
-    date2.setDate(date.getDate() + 1);
-    let tomorrow = SunCalc.getTimes(date2, location.latitude, location.longitude);
+    let tomorrow = new Date();
+    tomorrow.setDate(date.getDate() + 1);
+    let tomorrowSunrise = SunCalc.getTimes(tomorrow, location.latitude, location.longitude);
     dayLength = Math.round(Math.abs(sunsetTime - sunriseTime));
-    nightLength = Math.round(Math.abs(sunsetTime - tomorrow.sunrise.getTime()));
+    nightLength = Math.round(Math.abs(sunsetTime - tomorrowSunrise.sunrise.getTime()));
 
     //the length of an day hour + the length of a night hour ALWAYS sum to 120 minutes
     let dayHourLength = Math.round(dayLength / 12);
@@ -54,10 +61,16 @@ let getPlanetaryHour = (date, location) => {
     else {
         hourNumber = Math.floor((currentTime - sunsetTime) / nightHourLength);
         planetaryHour.hourStart = new Date(sunsetTime + hourNumber * nightHourLength);
-        planetaryHour.hourEnd = new Date(planetaryHour.hourStart + nightHourLength);
+        planetaryHour.hourEnd = new Date(planetaryHour.hourStart.getTime() + nightHourLength);
+        //remember we still had 12 daylight hours before night so this is the x+12th hour
+        hourNumber = hourNumber + 12;
     }
+
     planetaryHour.hour = hourNumber;
     planetaryHour.name = weekSequence[chaldeanSequence[hourNumber % 7]];
+    console.log(planetaryHour);
+    console.log(dayHourLength, nightHourLength);
+    console.log(dayHourLength / (60*1000), nightHourLength / (60*1000));
 
     // for (let x = 0; x < 24; x++) {
     //     if (x === 12)
@@ -124,10 +137,10 @@ let getPhaseName = (phase) => {
         return "Waning Crescent";
 }
 
-    //return time in 12-hour format along with AM/PM as a string
-    let timeToString = function (time) {
-        return "" + time.getHours() % 12 + ":" + (time.getMinutes() < 10 ? "0" + time.getMinutes() : time.getMinutes()) + " " + (time.getHours() > 12 ? "PM" : "AM");
-    };
+//return time in 12-hour format along with AM/PM as a string
+let timeToString = function (time) {
+    return "" + time.getHours() % 12 + ":" + (time.getMinutes() < 10 ? "0" + time.getMinutes() : time.getMinutes()) + " " + (time.getHours() > 12 ? "PM" : "AM");
+};
 
 // populates the moonrise, moonset, etc. containers
 let populateMoonStats = (date, location) => {
@@ -157,8 +170,8 @@ let populateMoonStats = (date, location) => {
     planetaryHour = getPlanetaryHour(date, location);
 
     document.querySelector("#box-hour span:nth-child(2)").innerHTML =
-         planetaryHour.name + ", "
-         + timeToString(planetaryHour.hourStart) + " - " + timeToString(planetaryHour.hourEnd);
+        planetaryHour.name + ", "
+        + timeToString(planetaryHour.hourStart) + " - " + timeToString(planetaryHour.hourEnd);
     document.querySelector("#box-hour img").src = "svg/" + planetaryHour.name + ".svg#svgView(viewBox(-4,-4,24,24))";
     document.querySelector("#box-hour img").title = planetaryHour.name;
 
@@ -215,11 +228,12 @@ window.addEventListener("load", function () {
 
     //if the user entered their address already at some point then show moon info
     //otherwise just show New York as a deafult
-    if (window.localStorage.address != null){
+    if (window.localStorage.address != null) {
         document.getElementById("location-textbox").value = window.localStorage.address;
         populateMoonStats(new Date(), window.localStorage);
     }
-    else{
+    else {
+        document.getElementById("location-textbox").value - "Manhattan, NY";
         geocoder.send("Manhattan, NY", function (event) {
             let responseObj = JSON.parse(event.target.responseText),
                 location = {};

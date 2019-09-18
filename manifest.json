@@ -1,6 +1,7 @@
 {
  	"manifest_version": 2,
- 	"name": "Lunar Tab",
+	"name": "Lunar Tab",
+	"short_name": "Lunar Tab",
  	"version": "1.0",
 	"description": "Shows today's moon phase and more on Chrome's new tab page.",
 	"icons": {
@@ -8,6 +9,7 @@
 		"48": "images/icon48.png",
 		"128": "images/icon128.png"
 	},
+	"default_locale": "en",
   	"chrome_url_overrides" : {
     	"newtab": "index.html"
   	}
