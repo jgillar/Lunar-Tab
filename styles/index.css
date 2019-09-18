@@ -60,7 +60,7 @@ a:hover{
     width: 1em;
 }
 #location-data.location-error{
-    background: linear-gradient(to right,hsl(0, 56%, 53%),hsl(0, 86%, 61%));
+    background: linear-gradient(to right,hsl(0, 56%, 53%),hsl(0, 91%, 62%));
 }
 #location-textbox.location-error{
     /* background: hsl(0, 71%, 65%); */
@@ -81,7 +81,7 @@ a:hover{
     border-radius: 50px;
 }
 
-/*  the Javascript used to draw the moon always leaves a 1px border
+/*  the JavaScript used to draw the moon always leaves a 1px border
     that is extremely noticeable on the dark portion
     this is just a div that is layed over the moon to cover it*/
 #moon-fix{
@@ -94,6 +94,9 @@ a:hover{
     top: 0;
     width: 498px;
     z-index: 1;
+}
+.moon-showing #moon-craters{
+    display:block;
 }
 #moon-craters{
     display: none;

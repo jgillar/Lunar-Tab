@@ -183,7 +183,19 @@ let populateMoonStats = (date, location) => {
             lightColour: "#c2b9d8",
             blur: 2
         });
-    document.getElementById("moon-craters").style.display = "block";
+    document.getElementById("moon-container").className += " moon-showing";
+};
+
+//only run when there's an error
+//remove all info about the moon on the page
+let clearMoonStats = () => {
+    let moonContainer = document.getElementById("moon-container");
+    moonContainer.innerHTML = "";
+    moonContainer.className = moonContainer.className.replace("/moon-showing/g", "");
+    document.querySelector("#box-phase span:first-child").innerHTML = "Moon Phase";
+    document.querySelectorAll(".box span:nth-child(2)").forEach( (element, index) => {
+        element.innerHTML = "...";
+    });
 };
 
 //just a simple object for handling API calls
@@ -217,13 +229,12 @@ window.addEventListener("load", function () {
                 locationDiv = document.getElementById("location-data");
             
             if(responseObj.status === "ZERO_RESULTS"){
-                console.log('no results');
                 locationDiv.className += " location-error";
+                clearMoonStats();
                 return; 
             }
             else{
-                let s = locationTextbox.className.replace("/location-error/g", "");
-                locationDiv.className = s;
+                locationDiv.className = locationTextbox.className.replace("/location-error/g", "");
             }
             //store the long/lat coords and location name for quick access
             localStorage.setItem("longitude", responseObj.results[0].geometry.location.lng);
@@ -238,9 +249,8 @@ window.addEventListener("load", function () {
     //if the user entered their address already at some point then show moon info
     //otherwise just show New York as a deafult
     if (window.localStorage.address != null) {
-
-        document.getElementById("location-textbox").value = window.localStorage.address;
         let date = new Date();
+        document.getElementById("location-textbox").value = window.localStorage.address;
         populateMoonStats(date, window.localStorage);
     }
     else {
