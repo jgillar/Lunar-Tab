@@ -190,8 +190,8 @@ let populateMoonStats = (date, location) => {
 //remove all info about the moon on the page
 let clearMoonStats = () => {
     let moonContainer = document.getElementById("moon-container");
-    moonContainer.innerHTML = "";
-    moonContainer.className = moonContainer.className.replace("/moon-showing/g", "");
+    moonContainer.className = moonContainer.className.replace(/moon-showing/g, "");
+    document.getElementById("moon").innerHTML = "";
     document.querySelector("#box-phase span:first-child").innerHTML = "Moon Phase";
     document.querySelectorAll(".box span:nth-child(2)").forEach( (element, index) => {
         element.innerHTML = "...";
@@ -234,7 +234,7 @@ window.addEventListener("load", function () {
                 return; 
             }
             else{
-                locationDiv.className = locationTextbox.className.replace("/location-error/g", "");
+                locationDiv.className = locationTextbox.className.replace(/location-error/g, "");
             }
             //store the long/lat coords and location name for quick access
             localStorage.setItem("longitude", responseObj.results[0].geometry.location.lng);
