@@ -138,7 +138,9 @@ let getPhaseName = (phase) => {
 
 //return time in 12-hour format along with AM/PM as a string
 let timeToString = function (time) {
-    return "" + time.getHours() % 12 + ":" + (time.getMinutes() < 10 ? "0" + time.getMinutes() : time.getMinutes()) + " " + (time.getHours() > 12 ? "PM" : "AM");
+    let hours = time.getHours(),
+        minutes = time.getMinutes();
+    return "" + (hours % 12 === 0 ? "12" : hours % 12) + ":" + (minutes < 10 ? "0" + minutes : minutes) + " " + (hours >= 12 ? "PM" : "AM");
 };
 
 // populates the moonrise, moonset, etc. containers
@@ -146,7 +148,8 @@ let populateMoonStats = (date, location) => {
     let times,
         illumination,
         astroSign,
-        planetaryHour;
+        planetaryHour,
+        moonContainer;
 
     times = SunCalc.getMoonTimes(date, location.latitude, location.longitude);
 
@@ -182,16 +185,18 @@ let populateMoonStats = (date, location) => {
             shadowColour: "#1e132c",
             lightColour: "#c2b9d8",
             blur: 2
-        });
-    document.getElementById("moon-container").className += " moon-showing";
+        });  
+
+    moonContainer = document.getElementById("moon-container");
+    moonContainer.className = moonContainer.className.replace(/moon-error/g, "");
 };
 
 //only run when there's an error
 //remove all info about the moon on the page
 let clearMoonStats = () => {
-    let moonContainer = document.getElementById("moon-container");
-    moonContainer.className = moonContainer.className.replace(/moon-showing/g, "");
+    document.getElementById("moon-container").className += " moon-error";
     document.getElementById("moon").innerHTML = "";
+    document.getElementById("moon-text").innerHTML = "Location couldn't be found. Please try again.";
     document.querySelector("#box-phase span:first-child").innerHTML = "Moon Phase";
     document.querySelectorAll(".box span:nth-child(2)").forEach( (element, index) => {
         element.innerHTML = "...";
@@ -261,7 +266,6 @@ window.addEventListener("load", function () {
             location.address = responseObj.results[0].formatted_address;
             location.longitude = responseObj.results[0].geometry.location.lng;
             location.latitude = responseObj.results[0].geometry.location.lat;
-
             populateMoonStats(new Date(), location);
         });
     }
