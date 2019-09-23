@@ -122,6 +122,7 @@ span, img, #moon-container {
 #moon-craters{
     mix-blend-mode: color-burn;
     mix-blend-mode: multiply;
+    animation: fadein 1ms ease-in;
 }
 .crater, .crater:before, .crater:after{
     border-radius: 100px;
