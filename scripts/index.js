@@ -163,7 +163,6 @@ let populateMoonStats = (date, location) => {
 			"#box-moonset span:nth-child(2)"
 		).innerHTML = timeToString(times.set);
 
-	console.log(date);
 	illumination = SunCalc.getMoonIllumination(date);
 	document.querySelector(
 		"#box-phase span:first-child"
