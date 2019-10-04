@@ -159,8 +159,7 @@ let populateMoonStats = (date, location) => {
 		blur: 2
 	});
 
-	moonContainer = document.getElementById("moon-container");
-	moonContainer.className = moonContainer.className.replace(/moon-error/g, "");
+	document.getElementById("moon-container").classList.remove("moon-error");
 };
 
 //remove all info about the moon on the page
@@ -174,15 +173,10 @@ let clearMoonStats = () => {
 
 // show an error message on the middle of the page where the moon is
 let displayError = message => {
-	let moonText = document.getElementById("moon-text");
 	clearMoonStats();
-	document.getElementById("moon-container").className += " moon-error";
-	//trigger the CSS fade in transition by resetting the opacity
-	moonText.style.opacity = 0;
-	moonText.style.opacity = 1;
-	moonText.innerHTML = message;
+	document.getElementById("moon-text").innerHTML = message;
+	document.getElementById("moon-container").classList.add("moon-error");
 };
-
 // just a simple object for handling API calls
 let geocoder = {
 	url: "https://maps.googleapis.com/maps/api/geocode/json?",
@@ -222,19 +216,20 @@ window.addEventListener("load", function() {
 				//remember that any value returned is still success
 				//so these need to be handled outside of the error function passed in
 				if (responseObj.status === "ZERO_RESULTS") {
-					locationDiv.className += " location-error";
+					locationDiv.classList.add("location-error");
 					displayError("The location you entered was invalid. Please try again.");
 					return;
 				} else if (responseObj.status === "REQUEST_DENIED") {
 					displayError(responseObj.error_message);
 					return;
 				} else {
-					locationDiv.className = locationTextbox.className.replace(/location-error/g, "");
+					locationDiv.classList.remove("location-error");
 				}
 				//store the long/lat coords and location name for quick access
 				localStorage.setItem("longitude", responseObj.results[0].geometry.location.lng);
 				localStorage.setItem("latitude", responseObj.results[0].geometry.location.lat);
 				localStorage.setItem("address", responseObj.results[0].formatted_address);
+				populateMoonStats(new Date(), localStorage);
 			},
 			function() {
 				displayError("Could not reach Google's servers. Check your Internet connection.");
