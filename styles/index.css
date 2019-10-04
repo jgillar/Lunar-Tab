@@ -1,183 +1,205 @@
 @font-face {
-    font-family: "Fjalla One";
-    src: url("fonts/FjallaOne-Regular.ttf") format("truetype");
-    font-weight: normal;
-    font-style: normal;
+	font-family: "Fjalla One";
+	src: url("fonts/FjallaOne-Regular.ttf") format("truetype");
+	font-weight: normal;
+	font-style: normal;
 }
 @font-face {
-    font-family: "Source Sans Pro";
-    src: url("fonts/SourceSansPro-Regular.ttf") format("truetype");
-    font-weight: normal;
-    font-style: normal;
+	font-family: "Source Sans Pro";
+	src: url("fonts/SourceSansPro-Regular.ttf") format("truetype");
+	font-weight: normal;
+	font-style: normal;
 }
 
 body {
-    background: #0c0119;
-    color: #eee6fa;
-    font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif;
-    font-size: 18px;
-    line-height: 1.35;
+	background: #0c0119;
+	color: #eee6fa;
+	font-family: "Source Sans Pro", Helvetica, Arial, sans-serif;
+	font-size: 18px;
+	line-height: 1.35;
 }
 
-a:hover{
-    color: #ffe486;
-    color: #cc805a;
+a:hover {
+	color: #ffe486;
+	color: #cc805a;
 }
 @keyframes fadein {
-    from { opacity: 0; }
-    to   { opacity: 1; }
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
 }
-span, img, #moon-container {
-    animation: fadein 3s ease-in;
+@keyframes glow {
+	0% {
+		color: auto;
+		text-shadow: 0px;
+	}
+	50% {
+		color: #ffffff;
+		text-shadow: 1px 1px #ffffff;
+	}
+}
+span,
+img,
+#moon-container {
+	animation: fadein 3s ease-in;
 }
 /* Location Bar */
 @keyframes slidedown {
-    from { top: -4em }
-    to   { top: 0px; }
+	from {
+		top: -4em;
+	}
+	to {
+		top: 0px;
+	}
 }
-#location-data{
-    animation: slidedown 1s ease-out;
-    background: linear-gradient(to left,#ffe486,hsla(20, 70%, 65%, 1));
-    border-radius: 0 0 15px 0px;
-    display: inline-block;
-    margin-bottom: 1rem;
-    padding: 1rem;
-    position: relative;
-    z-index: 10;
-    width: auto;
-    color: #0c0119;
-    transition: background 0.5s linear;
+#location-data {
+	animation: slidedown 1s ease-out;
+	background: linear-gradient(to left, #ffe486, hsla(20, 70%, 65%, 1));
+	border-radius: 0 0 15px 0px;
+	display: inline-block;
+	margin-bottom: 1rem;
+	padding: 1rem;
+	position: relative;
+	z-index: 10;
+	width: auto;
+	color: #0c0119;
+	transition: background 0.5s linear;
 }
-#location-textbox{
-    background: transparent;
-    border: none;
-    border-bottom: 1px solid #0c0119;
-    outline: none;
-    text-overflow: ellipsis;
+#location-textbox {
+	background: transparent;
+	border: none;
+	border-bottom: 1px solid #0c0119;
+	outline: none;
+	text-overflow: ellipsis;
 }
-#location-textbox:focus{
-    border-bottom: 1px solid #ffffff;
+#location-textbox:focus {
+	border-bottom: 1px solid #ffffff;
 }
-#location-submit{
-    cursor: pointer;
-    background-image: url("../svg/wi-refresh.svg");
-    display: inline-block;
-    filter: invert(0.1) sepia(1) saturate(10) hue-rotate(211deg);
-    background-color: transparent;
-    border:  none;
-    background-repeat: no-repeat;
-    color:  transparent;
-    background-size: contain;
-    height: 1em;
-    width: 1em;
+#location-submit {
+	cursor: pointer;
+	background-image: url("../svg/wi-refresh.svg");
+	display: inline-block;
+	filter: invert(0.1) sepia(1) saturate(10) hue-rotate(211deg);
+	background-color: transparent;
+	border: none;
+	background-repeat: no-repeat;
+	color: transparent;
+	background-size: contain;
+	height: 1em;
+	width: 1em;
 }
-#location-submit:active{
-    outline: none;
-    border: none;
+#location-submit:active {
+	outline: none;
+	border: none;
 }
-#location-submit:hover{
-    filter: invert(1);
+#location-submit:hover {
+	filter: invert(1);
 }
-#location-data.location-error{
-    background: linear-gradient(to right,hsl(0, 56%, 53%),hsl(0, 91%, 62%));
+#location-data.location-error {
+	background: linear-gradient(to right, hsl(0, 56%, 53%), hsl(0, 91%, 62%));
 }
 /* End location bar */
 
 /* Moon */
-#moon-container{
-    height: 500px;
-    position: relative;
-    width: 500px;
-    margin: 0px auto;
-    transform-box: view-box;
+#moon-container {
+	height: 500px;
+	position: relative;
+	width: 500px;
+	margin: 0px auto;
+	transform-box: view-box;
 }
-#moon-text{
-    color: #eee6fa;
-    text-align: center;
-    padding: 50% 0px;
-    font-size: 2rem;
+#moon-text {
+	color: #eee6fa;
+	text-align: center;
+	padding: 50% 0px;
+	font-size: 2rem;
 }
-.moon{
-    height: 200px;
-    width: 200px;
-    border-radius: 50px;
+.moon {
+	height: 200px;
+	width: 200px;
+	border-radius: 50px;
 }
-.moon-error div{
-    display: none;
+.moon-error div {
+	display: none;
 }
 /*  the JavaScript used to draw the moon always leaves a 1px border
     that is extremely noticeable on the dark portion
     this is just a div that is layed over the moon to cover it*/
-#moon-fix{
-    background: transparent;
-    border:2px solid #0c0119 !important;
-    border-radius: 300px;
-    height: 498px;
-    left: 0px;
-    position: absolute;
-    top: 0;
-    width: 498px;
-    z-index: 1;
+#moon-fix {
+	background: transparent;
+	border: 2px solid #0c0119 !important;
+	border-radius: 300px;
+	height: 498px;
+	left: 0px;
+	position: absolute;
+	top: 0;
+	width: 498px;
+	z-index: 1;
 }
-#moon-craters{
-    mix-blend-mode: color-burn;
-    mix-blend-mode: multiply;
-    animation: fadein 1ms ease-in;
+#moon-craters {
+	mix-blend-mode: color-burn;
+	mix-blend-mode: multiply;
+	animation: fadein 1ms ease-in;
 }
-.crater, .crater:before, .crater:after{
-    border-radius: 100px;
-    background-color: #bfb3d8;
-    position: absolute;
+.crater,
+.crater:before,
+.crater:after {
+	border-radius: 100px;
+	background-color: #bfb3d8;
+	position: absolute;
 }
-.crater:nth-child(1){
-    height: 65px;
-    right: 70px;
-    top: 179px;
-    width: 65px;
+.crater:nth-child(1) {
+	height: 65px;
+	right: 70px;
+	top: 179px;
+	width: 65px;
 }
-.crater:nth-child(2){
-    height: 115px;
-    top: 300px;
-    left: 90px;
-    width: 115px;
+.crater:nth-child(2) {
+	height: 115px;
+	top: 300px;
+	left: 90px;
+	width: 115px;
 }
-.crater:nth-child(3){
-    height: 100px;
-    top: 212px;
-    right: 29px;
-    /* transform: skew(-5deg, -5deg); */
-    width: 100px;
+.crater:nth-child(3) {
+	height: 100px;
+	top: 212px;
+	right: 29px;
+	/* transform: skew(-5deg, -5deg); */
+	width: 100px;
 }
-.crater-cluster{
-    height: 50px;
-    top: 75px;
-    left: 101px;
-    width: 50px;
+.crater-cluster {
+	height: 50px;
+	top: 75px;
+	left: 101px;
+	width: 50px;
 }
-.crater-cluster::before{
-    content: "";
-    display: block;
-    height: 25px;
-    width: 25px;
-    top: 70px;
-    left: 10px;
+.crater-cluster::before {
+	content: "";
+	display: block;
+	height: 25px;
+	width: 25px;
+	top: 70px;
+	left: 10px;
 }
-.crater-cluster::after{
-    content: "";
-    display: block;
-    height: 30px;
-    width: 30px;
-    top: 10px;
-    left: 65px;
+.crater-cluster::after {
+	content: "";
+	display: block;
+	height: 30px;
+	width: 30px;
+	top: 10px;
+	left: 65px;
 }
 
-#space{
-    height: 100%;
-    left: 0px;
-    position: fixed;
-    top: 0px;
-    width: 100%;
-    z-index: -1;
+#space {
+	height: 100%;
+	left: 0px;
+	position: fixed;
+	top: 0px;
+	width: 100%;
+	z-index: -1;
 }
 
 /*  these are totally arbitrary, I just chose numbers that made the
@@ -186,132 +208,135 @@ span, img, #moon-container {
     using canvas and javascript
 */
 .stars {
-    background-image: 
-    radial-gradient(4px 4px at 20px 30px, #f2e4f5,  #ffffff00),       
-    radial-gradient(3px 3px at 50px 160px, #ab92b0, #ffffff00),       
-    radial-gradient(2px 2px at 90px 40px,#d1c8e3, #ffffff00),       
-    radial-gradient(2px 2px at 111px 88px, #e2d2e3, #ffffff00),       
-    radial-gradient(2px 2px at 166px 120px, #d9c3e7, #ffffff00),       
-    radial-gradient(3px 3px at 222px 222px, #AB92B0, #ffffff00),       
-    radial-gradient(2px 2px at 155px 255px,#bfb7ce, #ffffff00),       
-    radial-gradient(2px 2px at 133px 222px, #f5e6f6, #ffffff00),       
-    radial-gradient(2px 2px at 155px 133px, #d9c3e7, #ffffff00),  
-    radial-gradient(3px 3px at 222px 344px, #aB92B0, #ffffff00),       
-    radial-gradient(2px 2px at 244px 333px, #d1c8e3, #ffffff00),  
-    radial-gradient(3px 3px at 300px 100px, #aB92B0, #ffffff00),    
-    radial-gradient(3px 3px at 55px 333px, #aB92B0, #ffffff00),                    
-    radial-gradient(2px 2px at 155px 344px, #aB92B0, #ffffff00),                    
-    radial-gradient(2px 2px at 111px 300px, #e8d9e9, #ffffff00),       
-    radial-gradient(2px 2px at 22px 322px, #d9c3e7, #ffffff00),
-    radial-gradient(3px 3px at 255px 111px, #aB92B0, #ffffff00),       
-    radial-gradient(2px 2px at 244px 333px, #d1c8e3, #ffffff00),       
-    radial-gradient(2px 2px at 288px 322px, #f5e6f6, #ffffff00),       
-    radial-gradient(2px 2px at 266px 344px, #d9c3e7, #ffffff00)
-    ;
-    background-repeat: repeat;
-    background-size: 350px 350px;
-    width: 100%;
-    height:  100%;
-  }
+	background-image: radial-gradient(4px 4px at 20px 30px, #f2e4f5, #ffffff00),
+		radial-gradient(3px 3px at 50px 160px, #ab92b0, #ffffff00),
+		radial-gradient(2px 2px at 90px 40px, #d1c8e3, #ffffff00),
+		radial-gradient(2px 2px at 111px 88px, #e2d2e3, #ffffff00),
+		radial-gradient(2px 2px at 166px 120px, #d9c3e7, #ffffff00),
+		radial-gradient(3px 3px at 222px 222px, #ab92b0, #ffffff00),
+		radial-gradient(2px 2px at 155px 255px, #bfb7ce, #ffffff00),
+		radial-gradient(2px 2px at 133px 222px, #f5e6f6, #ffffff00),
+		radial-gradient(2px 2px at 155px 133px, #d9c3e7, #ffffff00),
+		radial-gradient(3px 3px at 222px 344px, #ab92b0, #ffffff00),
+		radial-gradient(2px 2px at 244px 333px, #d1c8e3, #ffffff00),
+		radial-gradient(3px 3px at 300px 100px, #ab92b0, #ffffff00),
+		radial-gradient(3px 3px at 55px 333px, #ab92b0, #ffffff00),
+		radial-gradient(2px 2px at 155px 344px, #ab92b0, #ffffff00),
+		radial-gradient(2px 2px at 111px 300px, #e8d9e9, #ffffff00),
+		radial-gradient(2px 2px at 22px 322px, #d9c3e7, #ffffff00),
+		radial-gradient(3px 3px at 255px 111px, #ab92b0, #ffffff00),
+		radial-gradient(2px 2px at 244px 333px, #d1c8e3, #ffffff00),
+		radial-gradient(2px 2px at 288px 322px, #f5e6f6, #ffffff00),
+		radial-gradient(2px 2px at 266px 344px, #d9c3e7, #ffffff00);
+	background-repeat: repeat;
+	background-size: 350px 350px;
+	width: 100%;
+	height: 100%;
+}
 /* End of Moon */
 
 /* Stats */
-#box-phase{
-    grid-area: phase;
-}#box-moonrise{
-    grid-area: moonrise;
-}#box-moonset{
-    grid-area: moonset;
-}#box-zodiac{
-    grid-area: zodiac;
+#box-phase {
+	grid-area: phase;
 }
-#box-hour{
-    grid-area: hour;
-}#box-misc{
-    grid-area: misc;
-    text-align: left;
+#box-moonrise {
+	grid-area: moonrise;
 }
-#stats-grid{
-    display: grid;
-    grid-gap: 5px;
-    grid-template-columns: repeat(4, 1fr);
-    grid-template-areas: "phase phase phase phase"
-                         "moonrise moonset zodiac hour"
-                         "misc misc misc misc";
-    margin: 2rem auto 1rem auto;
-    max-width: 1200px;
-    width: 80%;
+#box-moonset {
+	grid-area: moonset;
 }
-.box{
-    text-align: center;
-    transition: display .5s linear;
+#box-zodiac {
+	grid-area: zodiac;
+}
+#box-hour {
+	grid-area: hour;
+}
+#box-misc {
+	grid-area: misc;
+	text-align: left;
+}
+#stats-grid {
+	display: grid;
+	grid-gap: 5px;
+	grid-template-columns: repeat(4, 1fr);
+	grid-template-areas:
+		"phase phase phase phase"
+		"moonrise moonset zodiac hour"
+		"misc misc misc misc";
+	margin: 2rem auto 1rem auto;
+	max-width: 1200px;
+	width: 80%;
+}
+.box {
+	text-align: center;
+	transition: display 0.5s linear;
 }
 /*  can't change fill/stroke for SVGS in external CSS
     a way around this is to abuse filters */
-.box img{
-    display: block;
-    filter: invert(0.75) sepia(1) saturate(2) hue-rotate(190deg);
-    height: 100px;
-    margin: 0px auto;
+.box img {
+	display: block;
+	filter: invert(0.75) sepia(1) saturate(2) hue-rotate(190deg);
+	height: 100px;
+	margin: 0px auto;
 }
-.box span:first-of-type{
-    font-family: 'Fjalla One', sans-serif;
-    font-size: 1.35em;
-    display: block;
+.box span:first-of-type {
+	font-family: "Fjalla One", sans-serif;
+	font-size: 1.35em;
+	display: block;
 }
 /* End of Stats */
 
-
 /* Media Queries */
-@media (max-width: 900px) and (min-width: 500px), (max-height: 650px){  
-    #moon-container{
-        transform: scale(.7);
-        margin: -5% auto -5% auto;
-    }
-    .box img{
-        height: 90px;
-        width: 90px;
-    }
+@media (max-width: 900px) and (min-width: 500px), (max-height: 650px) {
+	#moon-container {
+		transform: scale(0.7);
+		margin: -5% auto -5% auto;
+	}
+	.box img {
+		height: 90px;
+		width: 90px;
+	}
 }
 
-@media all and (max-width: 900px) and (min-width: 500px){
-    #stats-grid{
-        grid-template-areas: "phase phase"
-        "moonrise moonset"
-        "zodiac hour"
-        "misc misc";
-        grid-template-columns: 1fr 1fr;
-        margin: 1rem auto;
-    }  
+@media all and (max-width: 900px) and (min-width: 500px) {
+	#stats-grid {
+		grid-template-areas:
+			"phase phase"
+			"moonrise moonset"
+			"zodiac hour"
+			"misc misc";
+		grid-template-columns: 1fr 1fr;
+		margin: 1rem auto;
+	}
 }
-
 
 @media all and (max-width: 500px) {
-    #stats-grid{
-        grid-template-columns: 1fr;
-        grid-template-areas: "phase"
-                             "moonrise"
-                             "moonset"
-                             "zodiac"
-                             "hour"
-                             "misc";
-        margin: 0 auto .5rem auto;
-    }
-    /*  moon-container is 500px wide, margin: auto won't center it when 
+	#stats-grid {
+		grid-template-columns: 1fr;
+		grid-template-areas:
+			"phase"
+			"moonrise"
+			"moonset"
+			"zodiac"
+			"hour"
+			"misc";
+		margin: 0 auto 0.5rem auto;
+	}
+	/*  moon-container is 500px wide, margin: auto won't center it when 
         it's wider than its container/the viewport */
-    #moon-container{
-        transform: translateX(-50%)  scale(.65);
-        margin: -5rem auto -2.75rem auto;
-        left: 50%;
-    }
-    .box:not(:first-child){
-        text-align: left;
-    }
-    .box img{
-        float: left;
-        margin-right: 25px;
-    }
-    .box section{
-        padding-top: 1.15em;
-    }
+	#moon-container {
+		transform: translateX(-50%) scale(0.65);
+		margin: -5rem auto -2.75rem auto;
+		left: 50%;
+	}
+	.box:not(:first-child) {
+		text-align: left;
+	}
+	.box img {
+		float: left;
+		margin-right: 25px;
+	}
+	.box section {
+		padding-top: 1.15em;
+	}
 }

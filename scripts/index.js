@@ -9,15 +9,7 @@ let getPlanetaryHour = (date, location) => {
 		sunriseTime = new Date(sun.sunrise.setSeconds(0)).getTime(),
 		sunsetTime = new Date(sun.sunset.setSeconds(0)).getTime(),
 		chaldeanSequence = [6, 4, 2, 0, 5, 3, 1], //Saturn, Jupiter, etc.
-		weekSequence = [
-			"Sun",
-			"Moon",
-			"Mars",
-			"Mercury",
-			"Jupiter",
-			"Venus",
-			"Saturn"
-		],
+		weekSequence = ["Sun", "Moon", "Mars", "Mercury", "Jupiter", "Venus", "Saturn"],
 		dayOfTheWeek = date.getDay(),
 		currentTime = date.getTime(),
 		dayLength,
@@ -52,15 +44,9 @@ let getPlanetaryHour = (date, location) => {
 	//there are 12 'planetary hours' during the day and 12 at night
 	let tomorrow = new Date();
 	tomorrow.setDate(date.getDate() + 1);
-	let tomorrowSunrise = SunCalc.getTimes(
-		tomorrow,
-		location.latitude,
-		location.longitude
-	);
+	let tomorrowSunrise = SunCalc.getTimes(tomorrow, location.latitude, location.longitude);
 	dayLength = Math.round(Math.abs(sunsetTime - sunriseTime));
-	nightLength = Math.round(
-		Math.abs(sunsetTime - tomorrowSunrise.sunrise.getTime())
-	);
+	nightLength = Math.round(Math.abs(sunsetTime - tomorrowSunrise.sunrise.getTime()));
 
 	//the length of an day hour + the length of a night hour ALWAYS sum to 120 minutes
 	let dayHourLength = Math.round(dayLength / 12);
@@ -71,20 +57,12 @@ let getPlanetaryHour = (date, location) => {
 	//the length of the hour length
 	if (currentTime < sunsetTime) {
 		hourNumber = Math.floor((currentTime - sunriseTime) / dayHourLength);
-		planetaryHour.hourStart = new Date(
-			sunriseTime + hourNumber * dayHourLength
-		);
-		planetaryHour.hourEnd = new Date(
-			planetaryHour.hourStart.getTime() + dayHourLength
-		);
+		planetaryHour.hourStart = new Date(sunriseTime + hourNumber * dayHourLength);
+		planetaryHour.hourEnd = new Date(planetaryHour.hourStart.getTime() + dayHourLength);
 	} else {
 		hourNumber = Math.floor((currentTime - sunsetTime) / nightHourLength);
-		planetaryHour.hourStart = new Date(
-			sunsetTime + hourNumber * nightHourLength
-		);
-		planetaryHour.hourEnd = new Date(
-			planetaryHour.hourStart.getTime() + nightHourLength
-		);
+		planetaryHour.hourStart = new Date(sunsetTime + hourNumber * nightHourLength);
+		planetaryHour.hourEnd = new Date(planetaryHour.hourStart.getTime() + nightHourLength);
 		//remember we still had 12 daylight hours before night so this is the x+12th hour
 		hourNumber = hourNumber + 12;
 	}
@@ -154,96 +132,77 @@ let populateMoonStats = (date, location) => {
 	//sometimes SunCalc will return an object with no rise property or no set property
 	//it seems random, sometimes it will happen to the same location
 	//ex salisbury 21804 dec 4
-	if (times.rise)
-		document.querySelector(
-			"#box-moonrise span:nth-child(2)"
-		).innerHTML = timeToString(times.rise);
-	if (times.set)
-		document.querySelector(
-			"#box-moonset span:nth-child(2)"
-		).innerHTML = timeToString(times.set);
+	if (times.rise) document.querySelector("#box-moonrise span:nth-child(2)").innerHTML = timeToString(times.rise);
+	if (times.set) document.querySelector("#box-moonset span:nth-child(2)").innerHTML = timeToString(times.set);
 
 	illumination = SunCalc.getMoonIllumination(date);
-	document.querySelector(
-		"#box-phase span:first-child"
-	).innerHTML = getPhaseName(illumination.phase);
+	document.querySelector("#box-phase span:first-child").innerHTML = getPhaseName(illumination.phase);
 	document.querySelector("#box-phase span:nth-child(2)").innerHTML =
 		Math.round(+illumination.fraction.toFixed(2) * 100) + "% illuminated";
+
 	astroSign = getAstroSign(date);
-	document.querySelector(
-		"#box-zodiac span:nth-child(2)"
-	).innerHTML = astroSign;
-	document.querySelector("#box-zodiac img").src =
-		"svg/" + astroSign + ".svg#svgView(viewBox(-4,-4,24,24))";
+	document.querySelector("#box-zodiac span:nth-child(2)").innerHTML = astroSign;
+	document.querySelector("#box-zodiac img").src = "svg/" + astroSign + ".svg#svgView(viewBox(-4,-4,24,24))";
 	document.querySelector("#box-zodiac img").title = astroSign;
 
 	planetaryHour = getPlanetaryHour(date, location);
-
 	document.querySelector("#box-hour span:nth-child(2)").innerHTML =
-		planetaryHour.name +
-		", " +
-		timeToString(planetaryHour.hourStart) +
-		" - " +
-		timeToString(planetaryHour.hourEnd);
-	document.querySelector("#box-hour img").src =
-		"svg/" + planetaryHour.name + ".svg#svgView(viewBox(-4,-4,24,24))";
+		planetaryHour.name + ", " + timeToString(planetaryHour.hourStart) + " - " + timeToString(planetaryHour.hourEnd);
+	document.querySelector("#box-hour img").src = "svg/" + planetaryHour.name + ".svg#svgView(viewBox(-4,-4,24,24))";
 	document.querySelector("#box-hour img").title = planetaryHour.name;
 
-	drawPlanetPhase(
-		document.getElementById("moon"),
-		illumination.fraction,
-		false,
-		{
-			diameter: 500,
-			earthshine: 0,
-			shadowColour: "#1e132c",
-			lightColour: "#c2b9d8",
-			blur: 2
-		}
-	);
+	drawPlanetPhase(document.getElementById("moon"), illumination.fraction, false, {
+		diameter: 500,
+		earthshine: 0,
+		shadowColour: "#1e132c",
+		lightColour: "#c2b9d8",
+		blur: 2
+	});
 
 	moonContainer = document.getElementById("moon-container");
-	moonContainer.className = moonContainer.className.replace(
-		/moon-error/g,
-		""
-	);
+	moonContainer.className = moonContainer.className.replace(/moon-error/g, "");
 };
 
-//only run when there's an error
 //remove all info about the moon on the page
 let clearMoonStats = () => {
-	document.getElementById("moon-container").className += " moon-error";
 	document.getElementById("moon").innerHTML = "";
-	document.getElementById("moon-text").innerHTML =
-		"Location couldn't be found. Please try again.";
-	document.querySelector("#box-phase span:first-child").innerHTML =
-		"Moon Phase";
-	document
-		.querySelectorAll(".box span:nth-child(2)")
-		.forEach((element, index) => {
-			element.innerHTML = "...";
-		});
+	document.querySelector("#box-phase span:first-child").innerHTML = "Moon Phase";
+	document.querySelectorAll(".box span:nth-child(2)").forEach(element => {
+		element.innerHTML = "...";
+	});
 };
 
-//just a simple object for handling API calls
+// show an error message on the middle of the page where the moon is
+let displayError = message => {
+	let moonText = document.getElementById("moon-text");
+	clearMoonStats();
+	document.getElementById("moon-container").className += " moon-error";
+	//trigger the CSS fade in transition by resetting the opacity
+	moonText.style.opacity = 0;
+	moonText.style.opacity = 1;
+	moonText.innerHTML = message;
+};
+
+// just a simple object for handling API calls
 let geocoder = {
 	url: "https://maps.googleapis.com/maps/api/geocode/json?",
 	key: CONFIG.key,
 	buildQuery: function(value) {
 		return this.url + encodeURI("address=" + value + "&key=" + CONFIG.key);
 	},
-	send: function(value, callback) {
+	send: function(value, callback, errorFunc) {
 		let request = new XMLHttpRequest();
 		//successful request
 		request.addEventListener("load", event => {
 			callback(event);
 		});
+		//error, google is down or user isn't connected to the internet
+		request.addEventListener("error", event => {
+			errorFunc(event);
+		});
 
 		request.open("POST", this.buildQuery(value));
-		request.setRequestHeader(
-			"Content-type",
-			"application/x-www-form-urlencoded"
-		);
+		request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 		request.send();
 	}
 };
@@ -251,57 +210,64 @@ let geocoder = {
 window.addEventListener("load", function() {
 	//submit button event listener for the location search box
 	let locationTextbox = document.getElementById("location-textbox");
-	document
-		.getElementById("location-form")
-		.addEventListener("submit", function(event) {
-			event.preventDefault();
-			geocoder.send(locationTextbox.value, function(event) {
+	document.getElementById("location-form").addEventListener("submit", function(event) {
+		event.preventDefault();
+		geocoder.send(
+			locationTextbox.value,
+			function(event) {
 				let responseObj = JSON.parse(event.target.responseText),
 					localStorage = window.localStorage,
 					locationDiv = document.getElementById("location-data");
 
+				//remember that any value returned is still success
+				//so these need to be handled outside of the error function passed in
 				if (responseObj.status === "ZERO_RESULTS") {
 					locationDiv.className += " location-error";
-					clearMoonStats();
+					displayError("The location you entered was invalid. Please try again.");
+					return;
+				} else if (responseObj.status === "REQUEST_DENIED") {
+					displayError(responseObj.error_message);
 					return;
 				} else {
-					locationDiv.className = locationTextbox.className.replace(
-						/location-error/g,
-						""
-					);
+					locationDiv.className = locationTextbox.className.replace(/location-error/g, "");
 				}
 				//store the long/lat coords and location name for quick access
-				localStorage.setItem(
-					"longitude",
-					responseObj.results[0].geometry.location.lng
-				);
-				localStorage.setItem(
-					"latitude",
-					responseObj.results[0].geometry.location.lat
-				);
-				localStorage.setItem(
-					"address",
-					responseObj.results[0].formatted_address
-				);
-			});
-		});
+				localStorage.setItem("longitude", responseObj.results[0].geometry.location.lng);
+				localStorage.setItem("latitude", responseObj.results[0].geometry.location.lat);
+				localStorage.setItem("address", responseObj.results[0].formatted_address);
+			},
+			function() {
+				displayError("Could not reach Google's servers. Check your Internet connection.");
+			}
+		);
+	});
 
 	//if the user entered their address already at some point then show moon info
 	//otherwise just show New York as a deafult
 	if (window.localStorage.address != null) {
 		let date = new Date();
-		document.getElementById("location-textbox").value =
-			window.localStorage.address;
+		document.getElementById("location-textbox").value = window.localStorage.address;
 		populateMoonStats(date, window.localStorage);
 	} else {
 		document.getElementById("location-textbox").value = "Manhattan, NY";
-		geocoder.send("Manhattan, NY", function(event) {
-			let responseObj = JSON.parse(event.target.responseText),
-				location = {};
-			location.address = responseObj.results[0].formatted_address;
-			location.longitude = responseObj.results[0].geometry.location.lng;
-			location.latitude = responseObj.results[0].geometry.location.lat;
-			populateMoonStats(new Date(), location);
-		});
+		geocoder.send(
+			"Manhattan, NY",
+			function(event) {
+				let responseObj = JSON.parse(event.target.responseText),
+					location = {};
+				//bad API key
+				if (responseObj.status === "REQUEST_DENIED") {
+					displayError(responseObj.error_message);
+					return;
+				}
+				location.address = responseObj.results[0].formatted_address;
+				location.longitude = responseObj.results[0].geometry.location.lng;
+				location.latitude = responseObj.results[0].geometry.location.lat;
+				populateMoonStats(new Date(), location);
+			},
+			function() {
+				displayError("Could not reach Google's servers. Check your Internet connection.");
+			}
+		);
 	}
 });
